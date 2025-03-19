@@ -1,0 +1,38 @@
+{
+    "branches": ["main"],
+    "repositoryUrl": "https://github.com/cyse7125-sp25-team03/helm-charts.git",
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "semantic-release-helm3",
+            {
+                "chartPath": "./api-server",
+                "onlyUpdateVersion": true
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "helm package ./api-server -d ./dist"
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                    "path": "./dist/*.tgz"
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": ["./api-server/Chart.yaml"],
+                "message": "chore(release): update Chart.yaml to version ${nextRelease.version} [skip ci]"
+            }
+        ]
+    ]
+}
